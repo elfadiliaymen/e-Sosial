@@ -13,6 +13,16 @@
     </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="index.jsp">e-Social</a>
+        <div class="navbar-nav">
+            <a class="nav-link" href="employeur">Employeurs</a>
+            <a class="nav-link active" href="assure">Assurés</a>
+            <a class="nav-link" href="declarations">Déclarations</a>
+        </div>
+    </div>
+</nav>
 
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
