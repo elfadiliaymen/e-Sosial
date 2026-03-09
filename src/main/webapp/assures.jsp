@@ -4,50 +4,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>e-Social - Liste des Assurés</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <style>
-        body { background-color: #f8f9fa; padding: 20px; }
-        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    </style>
+    <title>Gestion des Assurés</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container">
-        <a class="navbar-brand" href="index.jsp">e-Social</a>
-        <div class="navbar-nav">
-            <a class="nav-link" href="employeur">Employeurs</a>
-            <a class="nav-link active" href="assure">Assurés</a>
-            <a class="nav-link" href="declarations">Déclarations</a>
-        </div>
+<div class="navbar">
+    <div class="container" style="width: 100%; margin: 0; padding: 0 20px; border: none; background: transparent;">
+        <a href="index.jsp" class="brand">e-Social</a>
+        <a href="employeur">Employeurs</a>
+        <a href="assure">Assurés</a>
+        <a href="declarations">Déclarations</a>
     </div>
-</nav>
+</div>
 
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-primary">Gestion des Assurés</h2>
-        <a href="index.jsp" class="btn btn-secondary">Retour Accueil</a>
-    </div>
-
+<div class="container">
+    <h2>Gestion des Assurés</h2>
+    
     <c:if test="${param.error == 'true'}">
         <div class="alert alert-danger">Une erreur est survenue lors de l'enregistrement.</div>
     </c:if>
 
-    <div class="mb-3">
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAssureModal">
-            Ajouter un nouvel assuré
-        </button>
-    </div>
+    <h3>Ajouter un Assuré</h3>
+    <form action="assure" method="POST">
+        <div class="form-group">
+            <label>Nom Complet :</label>
+            <input type="text" name="nom" required>
+        </div>
+        <div class="form-group">
+            <label>Salaire Mensuel (DH) :</label>
+            <input type="number" step="0.01" name="salaire" required>
+        </div>
+        <div class="form-group">
+            <label>Employeur :</label>
+            <select name="employeurId" required>
+                <option value="">-- Choisir un employeur --</option>
+                <c:forEach items="${employeurs}" var="e">
+                    <option value="${e.id}">${e.raisonSociale}</option>
+                </c:forEach>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Enregistrer</button>
+    </form>
 
-    <table class="table table-striped table-bordered">
-        <thead class="table-dark">
+    <h3 class="mt-20">Liste des Assurés</h3>
+    <table>
+        <thead>
         <tr>
             <th>ID</th>
             <th>Nom Complet</th>
-            <th>Salaire Mensuel (DH)</th>
-            <th>Employeur (Raison Sociale)</th>
-            <th>Actions</th>
+            <th>Salaire</th>
+            <th>Employeur</th>
         </tr>
         </thead>
         <tbody>
@@ -55,57 +61,19 @@
             <tr>
                 <td><c:out value="${assure.id}"/></td>
                 <td><c:out value="${assure.nom}"/></td>
-                <td><fmt:formatNumber value="${assure.salaire}" pattern="#,##0.00"/></td>
+                <td><fmt:formatNumber value="${assure.salaire}" pattern="#,##0.00"/> DH</td>
                 <td><c:out value="${assure.employeur.raisonSociale}" default="N/A"/></td>
-                <td>
-                    <button class="btn btn-sm btn-warning">Modifier</button>
-                    <button class="btn btn-sm btn-danger">Supprimer</button>
-                </td>
             </tr>
         </c:forEach>
         <c:if test="${empty assures}">
             <tr>
-                <td colspan="6" class="text-center">Aucun assuré trouvé.</td>
+                <td colspan="4" class="text-center">Aucun assuré trouvé.</td>
             </tr>
         </c:if>
         </tbody>
     </table>
-</div>
-
-<!-- Add Assure Modal -->
-<div class="modal fade" id="addAssureModal" tabindex="-1" aria-labelledby="addAssureModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addAssureModalLabel">Ajouter un Assuré</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="assure" method="POST">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="nom" class="form-label">Nom Complet</label>
-                        <input type="text" class="form-control" id="nom" name="nom" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="salaire" class="form-label">Salaire Mensuel (DH)</label>
-                        <input type="number" step="0.01" class="form-control" id="salaire" name="salaire" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeurId" class="form-label">Employeur</label>
-                        <select class="form-select" id="employeurId" name="employeurId" required>
-                            <option value="">Sélectionner un employeur</option>
-                            <c:forEach items="${employeurs}" var="e">
-                                <option value="${e.id}">${e.raisonSociale}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-                </div>
-            </form>
-        </div>
+    <div class="mt-20">
+        <a href="index.jsp" class="btn btn-info">Retour à l'accueil</a>
     </div>
 </div>
 

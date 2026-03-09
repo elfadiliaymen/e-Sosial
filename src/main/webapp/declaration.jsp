@@ -5,64 +5,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Déclaration Mensuelle</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Déclarations Mensuelles</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-light">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="index.jsp">e-Social</a>
-        <div class="navbar-nav">
-            <a class="nav-link" href="employeur">Employeurs</a>
-            <a class="nav-link" href="assure">Assurés</a>
-            <a class="nav-link active" href="declarations">Déclarations</a>
-        </div>
+<body>
+<div class="navbar">
+    <div class="container" style="width: 100%; margin: 0; padding: 0 20px; border: none; background: transparent;">
+        <a href="index.jsp" class="brand">e-Social</a>
+        <a href="employeur">Employeurs</a>
+        <a href="assure">Assurés</a>
+        <a href="declarations">Déclarations</a>
     </div>
-</nav>
+</div>
 
-<div class="container mt-5">
-    <h2 class="mb-4">Nouvelle Déclaration de Salaire</h2>
+<div class="container">
+    <h2>Nouvelle Déclaration de Salaire</h2>
 
-    <form action="declarations" method="POST" class="card p-4 mb-4">
-        <div class="row g-3">
-            <div class="col-md-4">
-                <label class="form-label">Employeur</label>
-                <select name="employeurId" class="form-select" required>
-                    <option value="">Sélectionner un employeur</option>
-                    <%
-                        List<Employeur> employeurs = (List<Employeur>) request.getAttribute("employeurs");
-                        if (employeurs != null) {
-                            for (Employeur e : employeurs) {
-                    %>
-                    <option value="<%= e.getId() %>"><%= e.getRaisonSociale() %></option>
-                    <%
-                            }
+    <form action="declarations" method="POST">
+        <div class="form-group">
+            <label>Employeur :</label>
+            <select name="employeurId" required>
+                <option value="">-- Choisir un employeur --</option>
+                <%
+                    List<Employeur> employeurs = (List<Employeur>) request.getAttribute("employeurs");
+                    if (employeurs != null) {
+                        for (Employeur e : employeurs) {
+                %>
+                <option value="<%= e.getId() %>"><%= e.getRaisonSociale() %></option>
+                <%
                         }
-                    %>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Mois</label>
-                <input type="number" name="mois" class="form-control" placeholder="03" min="1" max="12" required>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Année</label>
-                <input type="number" name="annee" class="form-control" placeholder="2026" required>
-            </div>
-            <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary w-100">Valider</button>
-            </div>
+                    }
+                %>
+            </select>
         </div>
+        <div class="form-group">
+            <label>Mois (1-12) :</label>
+            <input type="number" name="mois" min="1" max="12" placeholder="03" required>
+        </div>
+        <div class="form-group">
+            <label>Année :</label>
+            <input type="number" name="annee" placeholder="2026" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Valider la Déclaration</button>
     </form>
 
-    <h3 class="mt-5">Historique des Déclarations</h3>
-    <table class="table table-bordered bg-white mt-3">
-        <thead class="table-secondary">
+    <h2 class="mt-20">Historique des Déclarations</h2>
+    <table>
+        <thead>
         <tr>
             <th>ID</th>
             <th>Employeur</th>
             <th>Période</th>
-            <th>Date Déclaration</th>
+            <th>Date Système</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -78,7 +72,7 @@
             <td><%= d.getMois() %> / <%= d.getAnnee() %></td>
             <td><%= d.getDate_declaration() %></td>
             <td>
-                <a href="cotisations?declarationId=<%= d.getId() %>" class="btn btn-sm btn-info text-white">Voir Cotisations</a>
+                <a href="cotisations?declarationId=<%= d.getId() %>" class="btn btn-sm btn-info">Détails</a>
             </td>
         </tr>
         <%

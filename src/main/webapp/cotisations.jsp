@@ -5,39 +5,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>e-Social - Détails des Cotisations</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Détails des Cotisations</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-light">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="index.jsp">e-Social</a>
-        <div class="navbar-nav">
-            <a class="nav-link" href="employeur">Employeurs</a>
-            <a class="nav-link" href="assure">Assurés</a>
-            <a class="nav-link" href="declarations">Déclarations</a>
-        </div>
+<body>
+<div class="navbar">
+    <div class="container" style="width: 100%; margin: 0; padding: 0 20px; border: none; background: transparent;">
+        <a href="index.jsp" class="brand">e-Social</a>
+        <a href="employeur">Employeurs</a>
+        <a href="assure">Assurés</a>
+        <a href="declarations">Déclarations</a>
     </div>
-</nav>
+</div>
 
-<div class="container mt-5">
+<div class="container">
     <%
         Declaration d = (Declaration) request.getAttribute("declaration");
         if (d != null) {
     %>
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Détails des Cotisations - <%= d.getMois() %>/<%= d.getAnnee() %></h2>
-        <span class="badge bg-primary fs-5">Employeur: <%= d.getEmployeur().getRaisonSociale() %></span>
-    </div>
+    <h2>Cotisations - <%= d.getMois() %>/<%= d.getAnnee() %></h2>
+    <p><b>Employeur :</b> <%= d.getEmployeur().getRaisonSociale() %></p>
 
-    <table class="table table-hover bg-white shadow-sm">
-        <thead class="table-dark">
+    <table>
+        <thead>
         <tr>
-            <th>Nom de l'Assuré</th>
-            <th>Salaire (DH)</th>
-            <th>Part Salariale (4.48%)</th>
-            <th>Part Patronale (24.89%)</th>
-            <th>Total Cotisation</th>
+            <th>Assuré</th>
+            <th>Salaire</th>
+            <th>Salariale (4.48%)</th>
+            <th>Patronale (24.89%)</th>
+            <th>Total</th>
         </tr>
         </thead>
         <tbody>
@@ -51,27 +47,27 @@
             <td><%= String.format("%.2f", c.getAssure().getSalaire()) %></td>
             <td><%= String.format("%.2f", c.getCotisation_salariale()) %></td>
             <td><%= String.format("%.2f", c.getCotisation_patronale()) %></td>
-            <td class="fw-bold"><%= String.format("%.2f", c.getTotal_cotisation()) %></td>
+            <td><b><%= String.format("%.2f", c.getTotal_cotisation()) %></b></td>
         </tr>
         <%
                 }
             }
         %>
         </tbody>
-        <tfoot class="table-light">
-        <tr class="fs-5">
-            <td colspan="4" class="text-end fw-bold">Total à payer par l'employeur :</td>
-            <td class="text-danger fw-bold"><%= String.format("%.2f", (Double)request.getAttribute("totalAumony")) %> DH</td>
+        <tfoot>
+        <tr>
+            <td colspan="4" style="text-align: right;"><b>Total à payer :</b></td>
+            <td style="color: red;"><b><%= String.format("%.2f", (Double)request.getAttribute("totalAumony")) %> DH</b></td>
         </tr>
         </tfoot>
     </table>
     <% } else { %>
-    <div class="alert alert-warning">Déclaration non trouvée.</div>
+    <div class="alert alert-danger">Déclaration non trouvée.</div>
     <% } %>
 
-    <div class="mt-3">
-        <a href="declarations" class="btn btn-outline-secondary">Retour aux Déclarations</a>
-        <button class="btn btn-outline-secondary" onclick="window.print()">Imprimer le Reçu</button>
+    <div class="mt-20">
+        <a href="declarations" class="btn btn-info">Retour</a>
+        <button class="btn btn-primary" onclick="window.print()">Imprimer</button>
     </div>
 </div>
 </body>
